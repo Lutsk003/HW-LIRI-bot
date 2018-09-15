@@ -18,12 +18,13 @@
   },
   "homepage": "https://github.com/Lutsk003/HW-LIRI-bot#readme",
   "dependencies": {
+    "bandsintown": "^1.0.1",
     "dotenv": "^6.0.0",
     "moment": "^2.22.2",
     "node-spotify-api": "^1.0.7",
     "request": "^2.88.0",
+    "simple-node-logger": "^0.93.40",
     "spotify": "^0.3.0",
-    "spotify-web-api-node": "^4.0.0",
-    "twitter": "^1.7.1"
+    "spotify-web-api-node": "^4.0.0"
   }
 }

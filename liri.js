@@ -1,9 +1,8 @@
 // get data from keys.js 
 var keys = require('./keys.js');
 var request = require('request');
-var twitter = require('twitter');
+var bandsintown = require('bandsintown')('codingbootcamp');
 var spotify = require('node-spotify-api')
-var client = new twitter(keys.twitterKeys);
 var fs = require('fs')
 
 //arg array
@@ -24,8 +23,8 @@ for (var i = 3; i < nodeArgv.length; i++) {
 
 // switch case
 switch(command){
-    case "my-tweets":
-        showTweets();
+    case "concert-this":
+        showConcerts();
     break;
 
     case "spotify-this-song":
@@ -52,6 +51,29 @@ switch(command){
         console.log("{Please enter a correct command: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
     break;
 }
+
+function showConcerts(){
+    var concertsURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
+
+    request(concertsURL, function (error, response, body){
+        if(!error && response.statusCode == 200){
+            var body = JSON.parse(body);
+        
+            console.log(`Artist: ${body.artistData.name}`)
+            console.log(`Date: ${body.eventData.datetime}`)
+            console.log(`Venue: ${body.venueData.name}`)
+
+            //add to log.txt
+            fs.appendFile('log.txt', "Artist: " + body.artistData.name);
+            fs.appendFile('log.txt', "Date: " + body.eventData.datetime);
+            fs.appendFile('log.txt', "Venue: " + body.venueData.name);
+        }
+        else{
+            console.log("There was an error with your request")
+        }
+    });
+}
+
 
 function spotifySong(song){
     spotify.search({ type: 'track', query: song}, function(error, data){
@@ -82,7 +104,7 @@ function spotifySong(song){
 }
 
 function omdbData(movie){
-    var omdbURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&&r=json&tomatoes=true&apikey=trilogy";
+    var omdbURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&tomatoes=true&apikey=trilogy";
 
 
     request(omdbURL, function(error, response, body){
